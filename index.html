@@ -30,24 +30,49 @@
                 <button class="video-info-form-btn" type="submit">Get Info</button>
             </form>
             <div id="video-info-hidden">
-                <p id="result"></p>
+                <ul id="video-info-list">
+                </ul>
             </div>
         </div>
         <script>
             const electron = require('electron');
             const { ipcRenderer } = electron;
+            const list = document.querySelector('ul');
+
+            function fileName(str) {
+                return str.split('\\').pop().split('/').pop();
+            }
+
+            function humanFileSize(size) {
+                var i = Math.floor( Math.log(size) / Math.log(1024) );
+                return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+            };
 
             document.querySelector('form').addEventListener('submit', (event) => {
                 event.preventDefault();
+                list.innerHTML = '';
                 const { path } = document.querySelector('input').files[0];
-                console.log('PATH', path)
-
                 ipcRenderer.send('video:submit', path);
             });
 
-            ipcRenderer.on('video:metadata', (event, duration) => {
+            ipcRenderer.on('video:metadata', (event, { duration, filename, format_long_name, size }) => {
                 document.getElementById('video-info-hidden').className = "video-info-result";
-                document.querySelector('#result').innerHTML = `Duration: ${duration} seconds`
+                const videoList = document.getElementById('video-info-list');
+                const metaDataArr = [
+                    `File name: ${fileName(filename)}`,
+                    `Duration: ${duration} seconds`, 
+                    `Format: ${format_long_name}`, 
+                    `File Size: ${humanFileSize(size)}`
+                ]
+                metaDataArr.forEach(renderMetaData)
+                
+                function renderMetaData(element, index, arr) {
+                    var li = document.createElement('li');
+                    li.setAttribute('class','item');
+                    videoList.appendChild(li);
+                    t = document.createTextNode(element);
+                    li.innerHTML=li.innerHTML + element;
+                }
             });
         </script>
     </body>

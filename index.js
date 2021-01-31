@@ -18,7 +18,7 @@ ipcMain.on('video:submit', (event, path) => {
     ffmpeg.ffprobe(path, (err, metadata) => {
         mainWindow.webContents.send(
             'video:metadata',
-            metadata.format.duration
+            metadata.format
         );
     });
 });

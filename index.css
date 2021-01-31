@@ -1,5 +1,11 @@
 body {
     font-family: 'Roboto';
+    background-color: #ccc;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
 }
 
 .video-info-container, 
@@ -12,24 +18,37 @@ form,
     flex-direction: column;
 }
 
+form {
+    width: 80%;
+}
+
 form,
-.video-info-result {
-    background-color: #ccc;
-    width: 50%;
+li {
+    background-color: #ddd;
     border-radius: 5px;
-    color: #eee;
+    color: #000;
 }
 
 .video-info-hidden {
     display: none;
 }
 
+.video-info-list {
+    display: flex;
+    justify-content: center;
+}
+
 .video-info-result {
+    width: 80%;
+}
+
+li {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 1rem;
     flex-direction: column;
+    padding: 1rem 0;
 }
 
 .video-info-hidden > h3 {
@@ -41,7 +60,7 @@ form,
 }
 
 label {
-    color: #eee;
+    color: #000;
 }
 
 .video-info-form-btn,
@@ -63,7 +82,7 @@ label {
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 .video-info-form-btn:hover,

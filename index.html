@@ -10,22 +10,29 @@
         <title>Electron Video Info</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./index.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <h1>Video Info</h1>
-        <form>
-            <div>
-                <label>Select a video</label>
-                <input type="file" accept="video/*" />
+        <div class="video-info-container">
+            <h1>Video Info</h1>
+            <form>
+                <div class="video-info-form">
+                    <div class="upload-btn-wrapper">
+                        <button class="video-input-btn">Select a Video</button>
+                        <input type="file" name="myfile" />
+                    </div>
+                </div>
+                <button class="video-info-form-btn" type="submit">Get Info</button>
+            </form>
+            <div id="video-info-hidden">
+                <p id="result"></p>
             </div>
-            <button type="submit">Get Info</button>
-        </form>
-
-        <h1 id="result"></h1>
-
+        </div>
         <script>
             const electron = require('electron');
             const { ipcRenderer } = electron;
@@ -33,12 +40,14 @@
             document.querySelector('form').addEventListener('submit', (event) => {
                 event.preventDefault();
                 const { path } = document.querySelector('input').files[0];
+                console.log('PATH', path)
 
                 ipcRenderer.send('video:submit', path);
             });
 
             ipcRenderer.on('video:metadata', (event, duration) => {
-                document.querySelector('#result').innerHTML = `Video is ${duration} seconds`
+                document.getElementById('video-info-hidden').className = "video-info-result";
+                document.querySelector('#result').innerHTML = `Duration: ${duration} seconds`
             });
         </script>
     </body>
